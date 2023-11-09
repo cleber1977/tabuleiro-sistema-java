@@ -26,5 +26,13 @@ public class Board {
 	public void setColumns(int columns) {
 		this.columns = columns;
 	}
+	
+	public Pecas pecas (int rows, int columns) {
+		return pecas[rows][columns];
+	}
+	public Pecas pecas(Posicao position) {
+		return pecas[position.getRow()][position.getColumn()];
+	}
+	
 
 }
