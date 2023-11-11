@@ -34,5 +34,9 @@ public class Board {
 		return pecas[position.getRow()][position.getColumn()];
 	}
 	
+	public void PlacePecas(Pecas peca, Posicao posicao) {
+		pecas[posicao.getRow()][posicao.getColumn()] = peca;
+		peca.position = posicao;
+	}
 
 }
