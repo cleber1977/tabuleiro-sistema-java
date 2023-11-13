@@ -1,5 +1,9 @@
 package aplicacao;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+import xadrex.ChessPosition;
 import xadrex.Color;
 import xadrex.PecasXadrex;
 
@@ -26,6 +30,17 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+	public static ChessPosition readChessPosition(Scanner sc) {
+		try {
+			String s = sc.nextLine();
+			char column = s.charAt(0);
+			int row = Integer.parseInt(s.substring(1));
+			return new ChessPosition(column, row);
+		} catch (RuntimeException e) {
+			throw new InputMismatchException("Erro Lendo a posição Xadrex: Valores Validos a1 ate h8");
+		}
+	}
+
 	public static void printBoard(PecasXadrex[][] pecas) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
@@ -41,13 +56,12 @@ public class UI {
 		if (pecas == null) {
 			System.out.print("-");
 		} else {
-            if (pecas.getColor() == Color.WHITE) {
-                System.out.print(ANSI_WHITE + pecas + ANSI_RESET);
-            }
-            else {
-                System.out.print(ANSI_YELLOW + pecas + ANSI_RESET);
-            }
-        }
+			if (pecas.getColor() == Color.WHITE) {
+				System.out.print(ANSI_WHITE + pecas + ANSI_RESET);
+			} else {
+				System.out.print(ANSI_YELLOW + pecas + ANSI_RESET);
+			}
+		}
 		System.out.print(" ");
 	}
 }

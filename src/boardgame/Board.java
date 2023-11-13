@@ -44,6 +44,20 @@ public class Board {
 		pecas[posicao.getRow()][posicao.getColumn()] = peca;
 		peca.position = posicao;
 	}
+	
+	public Pecas removePiece(Posicao position) {
+		if(!positionExists(position)) {
+			throw new BoardException("Posição não esta no Tabuleiro");
+		}
+		if(pecas(position) == null) {
+			return null;
+		}
+		Pecas aux = pecas(position);
+		aux.position = null;
+		
+		pecas[position.getRow()][position.getColumn()] = null;
+		return aux;
+	}
 
 	private boolean positionExists(int row, int column) {
 		return row >= 0 && row < rows && column >= 0 && column < columns;
@@ -59,5 +73,6 @@ public class Board {
 		}
 		return pecas(posicao) != null;
 	}
+	
 
 }
