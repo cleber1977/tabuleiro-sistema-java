@@ -1,7 +1,6 @@
 package xadrex;
 
 import boardgame.Board;
-import boardgame.Posicao;
 import xadrex.pecas.King;
 import xadrex.pecas.Rook;
 
@@ -22,10 +21,15 @@ public class PartidaXadrex {
 		}
 		return mat;
 	}
+	
+	private void placeNewPiece(char column, int row, PecasXadrex piece) {
+		board.PlacePecas(piece, new ChessPosition(column, row).toPosition());
+	}
+	
 	private void initialSetup() {
 		
-		board.PlacePecas(new Rook(board, Color.WHITE), new Posicao(2, 1));
-		board.PlacePecas(new King(board, Color.BLACK), new Posicao(0, 4));
-		board.PlacePecas(new King(board, Color.BLACK), new Posicao(7, 4));
+		placeNewPiece('b', 6, new Rook(board, Color.WHITE));
+		placeNewPiece('e', 8, new King(board, Color.WHITE));
+		placeNewPiece('e', 1, new King(board, Color.WHITE));
 	}
 }
