@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import xadrex.ChessPosition;
 import xadrex.Color;
+import xadrex.PartidaXadrex;
 import xadrex.PecasXadrex;
 
 public class UI {
@@ -47,6 +48,13 @@ public class UI {
 		}
 	}
 
+	public static void printMatch(PartidaXadrex partidaXadrex) {
+		printBoard(partidaXadrex.getPecasXadrexs());
+		System.out.println();
+		System.out.println("Turno: " + partidaXadrex.getTurn());
+		System.out.println("Wainting Player: " + partidaXadrex.getCurrentPlayer());
+	}
+
 	public static void printBoard(PecasXadrex[][] pecas) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
@@ -58,7 +66,7 @@ public class UI {
 		System.out.println("  a b c d e f g h");
 	}
 
-	public static void printBoard(PecasXadrex[][] pecas, boolean [][] possibleMoves) {
+	public static void printBoard(PecasXadrex[][] pecas, boolean[][] possibleMoves) {
 		for (int i = 0; i < pecas.length; i++) {
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < pecas.length; j++) {
@@ -68,12 +76,12 @@ public class UI {
 		}
 		System.out.println("  a b c d e f g h");
 	}
-	
-	private static void printPeca(PecasXadrex pecas,  boolean background) {
-		if(background) {
+
+	private static void printPeca(PecasXadrex pecas, boolean background) {
+		if (background) {
 			System.out.print(ANSI_BLUE_BACKGROUND);
 		}
-		
+
 		if (pecas == null) {
 			System.out.print("-" + ANSI_RESET);
 		} else {

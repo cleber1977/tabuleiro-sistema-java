@@ -17,7 +17,7 @@ public class Programa {
 		while(true) {
 			try {
 			UI.clearScreen();
-			UI.printBoard(partidaxadex.getPecasXadrexs());
+			UI.printMatch(partidaxadex);
 			System.out.println();
 			System.out.print("Source: ");
 			ChessPosition source = UI.readChessPosition(sc);

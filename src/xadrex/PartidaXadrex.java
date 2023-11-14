@@ -7,9 +7,20 @@ import xadrex.pecas.King;
 import xadrex.pecas.Rook;
 
 public class PartidaXadrex {
+	private int turn;
+	private Color currentPlayer;
 	private Board board;
+	
+	public int getTurn() {
+		return turn;
+	}
+	public Color getCurrentPlayer(){
+		return currentPlayer;
+	}
 
 	public PartidaXadrex() {
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		board = new Board(8, 8);
 		initialSetup();
 	}
@@ -36,6 +47,7 @@ public class PartidaXadrex {
 		validateSourcePosition(source);
 		validadeTargetPosition(source, target);
 		Pecas capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (PecasXadrex) capturedPiece;
 	}
 
@@ -50,6 +62,10 @@ public class PartidaXadrex {
 		if (!board.therIsaPiece(position)) {
 			throw new ChessExcepetion("Peca nao existe na Posicao");
 		}
+		if(currentPlayer != ((PecasXadrex)board.pecas(position)).getColor()) {
+			throw new ChessExcepetion("A Peca Escolhida não é Sua");
+		}
+			
 		if (!board.pecas(position).isThereAnyPossibleMove()) {
 			throw new ChessExcepetion("Nao existe movimento para peca Escolhida");
 		}
@@ -61,6 +77,10 @@ public class PartidaXadrex {
 		}
 	}
 
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
 	private void placeNewPiece(char column, int row, PecasXadrex piece) {
 		board.PlacePecas(piece, new ChessPosition(column, row).toPosition());
 	}
