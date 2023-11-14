@@ -19,10 +19,15 @@ public class Programa {
 			UI.clearScreen();
 			UI.printBoard(partidaxadex.getPecasXadrexs());
 			System.out.println();
-			System.out.println("Source: ");
+			System.out.print("Source: ");
 			ChessPosition source = UI.readChessPosition(sc);
+			 boolean [][] possibleMoves = partidaxadex.possibleMoves(source);
+			 UI.clearScreen();
+			 UI.printBoard(partidaxadex.getPecasXadrexs(), possibleMoves);
+			
+			 
 			System.out.println();
-			System.out.println("Target: ");
+			System.out.print("Target: ");
 			ChessPosition target = UI.readChessPosition(sc);
 			PecasXadrex capturedPiece = partidaxadex.performChessMove(source, target);
 			}
