@@ -43,6 +43,9 @@ public class PartidaXadrex {
 		if (!board.therIsaPiece(position)) {
 			throw new ChessExcepetion("Peca não existe na Posicao");
 		}
+		if(!board.pecas(position).isThereAnyPossibleMove()) {
+			throw new ChessExcepetion("Não existe movimento para peca Escolhida");
+		}
 	}
 
 	private void placeNewPiece(char column, int row, PecasXadrex piece) {

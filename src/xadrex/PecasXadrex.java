@@ -3,7 +3,7 @@ package xadrex;
 import boardgame.Board;
 import boardgame.Pecas;
 
-public class PecasXadrex extends Pecas{
+public abstract class PecasXadrex extends Pecas{
 	private Color color;
 
 	public PecasXadrex(Board board, Color color) {
