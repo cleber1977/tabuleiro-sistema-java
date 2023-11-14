@@ -28,10 +28,11 @@ public class PartidaXadrex {
 		Posicao source = sourcePosition.toPosition();
 		Posicao target = targetPoistion.toPosition();
 		validateSourcePosition(source);
+		validadeTargetPosition(source, target);
 		Pecas capturedPiece = makeMove(source, target);
 		return (PecasXadrex) capturedPiece;
 	}
-	
+
 	private Pecas makeMove(Posicao source, Posicao target) {
 		Pecas p = board.removePiece(source);
 		Pecas capturedPiece = board.removePiece(target);
@@ -41,10 +42,16 @@ public class PartidaXadrex {
 
 	private void validateSourcePosition(Posicao position) {
 		if (!board.therIsaPiece(position)) {
-			throw new ChessExcepetion("Peca não existe na Posicao");
+			throw new ChessExcepetion("Peca nao existe na Posicao");
 		}
-		if(!board.pecas(position).isThereAnyPossibleMove()) {
-			throw new ChessExcepetion("Não existe movimento para peca Escolhida");
+		if (!board.pecas(position).isThereAnyPossibleMove()) {
+			throw new ChessExcepetion("Nao existe movimento para peca Escolhida");
+		}
+	}
+
+	private void validadeTargetPosition(Posicao source, Posicao target) {
+		if (!board.pecas(source).possibleMove(target)) {
+			throw new ChessExcepetion("A Peca de origem nao pode se mover para destino");
 		}
 	}
 
