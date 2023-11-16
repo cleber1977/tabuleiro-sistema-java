@@ -57,10 +57,16 @@ public class UI {
 		printCapturePieces(captured);
 		System.out.println();
 		System.out.println("Turno: " + partidaXadrex.getTurn());
-		System.out.println("Agurdando Jogador: " + partidaXadrex.getCurrentPlayer());
-		if(partidaXadrex.getCheck()) {
-			System.out.println("Check! ");
+		if(!partidaXadrex.getCheckMate()) {
+			System.out.println("Agurdando Jogador: " + partidaXadrex.getCurrentPlayer());
+			if(partidaXadrex.getCheck()) {
+				System.out.println("Check! ");
+			}
+		}else {
+			System.out.println("CHECKMATE");
+			System.out.println("Vencedor " + partidaXadrex.getCurrentPlayer());
 		}
+		
 	}
 
 	public static void printBoard(PecasXadrex[][] pecas) {

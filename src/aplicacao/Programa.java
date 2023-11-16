@@ -19,7 +19,7 @@ public class Programa {
 
 		List<PecasXadrex> captured = new ArrayList<>();
 
-		while (true) {
+		while (!partidaxadex.getCheckMate()) {
 			try {
 				UI.clearScreen();
 				UI.printMatch(partidaxadex, captured);
@@ -46,6 +46,8 @@ public class Programa {
 				sc.nextLine();
 			}
 		}
+		UI.clearScreen();
+		UI.printMatch(partidaxadex, captured);
 
 	}
 
