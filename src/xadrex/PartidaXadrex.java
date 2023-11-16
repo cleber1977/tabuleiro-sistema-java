@@ -2,6 +2,7 @@ package xadrex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import boardgame.Board;
 import boardgame.Pecas;
@@ -13,6 +14,7 @@ public class PartidaXadrex {
 	private int turn;
 	private Color currentPlayer;
 	private Board board;
+	private boolean check;
 	
 	private List<Pecas> piecesOnTheBoard = new ArrayList<>();
 	private List<Pecas> capturedPieces = new ArrayList<>();
@@ -23,11 +25,15 @@ public class PartidaXadrex {
 	public Color getCurrentPlayer(){
 		return currentPlayer;
 	}
+	public boolean getCheck() {
+		return check;
+	}
 
 	public PartidaXadrex() {
 		turn = 1;
 		currentPlayer = Color.WHITE;
 		board = new Board(8, 8);
+		check = false;
 		initialSetup();
 	}
 
@@ -53,6 +59,11 @@ public class PartidaXadrex {
 		validateSourcePosition(source);
 		validadeTargetPosition(source, target);
 		Pecas capturedPiece = makeMove(source, target);
+		if(testCheck(currentPlayer)) {
+			undoMove(source, target, capturedPiece);
+			throw new ChessExcepetion("Vc nao pode se coloca em xeque");
+		}
+		check = (testCheck(oppnent(currentPlayer)))? true : false;
 		nextTurn();
 		return (PecasXadrex) capturedPiece;
 	}
@@ -67,6 +78,17 @@ public class PartidaXadrex {
 				capturedPieces.add(capturedPiece);
 		}
 		return capturedPiece;
+	}
+	
+	private void undoMove(Posicao source, Posicao target, Pecas capturedPiece) {
+		Pecas p = board.removePiece(target);
+		board.PlacePecas(p, source);
+		if(capturedPiece != null) {
+			board.PlacePecas(capturedPiece, target);
+			capturedPieces.remove(capturedPiece);
+			piecesOnTheBoard.add(capturedPiece);
+		}
+		
 	}
 
 	private void validateSourcePosition(Posicao position) {
@@ -91,6 +113,32 @@ public class PartidaXadrex {
 	private void nextTurn() {
 		turn++;
 		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
+	
+	private Color oppnent(Color color) {
+		return(color == Color.WHITE)? Color.BLACK : Color.WHITE;
+	}
+
+	private PecasXadrex king(Color color) {
+		List<Pecas> list = piecesOnTheBoard.stream().filter(x -> ((PecasXadrex)x).getColor() == color).collect(Collectors.toList());
+		for(Pecas p : list) {
+			if(p instanceof King) {
+				return (PecasXadrex)p;
+			}
+		}
+		throw new IllegalStateException("There is no " + color + "King on the board");
+	}
+	
+	private boolean testCheck(Color color) {
+		Posicao kingPosition = king(color).getChessPosition().toPosition();
+		List<Pecas> opponentPieces = piecesOnTheBoard.stream().filter(x -> ((PecasXadrex)x).getColor() == oppnent(color)).collect(Collectors.toList());
+		for(Pecas p : opponentPieces) {
+			boolean [][] mat = p.possibleMoves();
+			if(mat [kingPosition.getRow()][kingPosition.getColumn()]) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void placeNewPiece(char column, int row, PecasXadrex piece) {

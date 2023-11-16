@@ -11,6 +11,10 @@ public abstract class PecasXadrex extends Pecas{
 		super(board);
 		this.color = color;
 	}
+	
+	public ChessPosition getChessPosition() {
+		return ChessPosition.fromPosition(position);
+	}
 
 	public Color getColor() {
 		return color;
