@@ -1,5 +1,8 @@
 package xadrex;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Pecas;
 import boardgame.Posicao;
@@ -10,6 +13,9 @@ public class PartidaXadrex {
 	private int turn;
 	private Color currentPlayer;
 	private Board board;
+	
+	private List<Pecas> piecesOnTheBoard = new ArrayList<>();
+	private List<Pecas> capturedPieces = new ArrayList<>();
 	
 	public int getTurn() {
 		return turn;
@@ -55,6 +61,11 @@ public class PartidaXadrex {
 		Pecas p = board.removePiece(source);
 		Pecas capturedPiece = board.removePiece(target);
 		board.PlacePecas(p, target);
+		
+		if(capturedPiece != null){
+				piecesOnTheBoard.remove(capturedPiece);
+				capturedPieces.add(capturedPiece);
+		}
 		return capturedPiece;
 	}
 
@@ -63,7 +74,7 @@ public class PartidaXadrex {
 			throw new ChessExcepetion("Peca nao existe na Posicao");
 		}
 		if(currentPlayer != ((PecasXadrex)board.pecas(position)).getColor()) {
-			throw new ChessExcepetion("A Peca Escolhida não é Sua");
+			throw new ChessExcepetion("A Peca Escolhida nao e Sua");
 		}
 			
 		if (!board.pecas(position).isThereAnyPossibleMove()) {
@@ -81,8 +92,10 @@ public class PartidaXadrex {
 		turn++;
 		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
 	}
+	
 	private void placeNewPiece(char column, int row, PecasXadrex piece) {
 		board.PlacePecas(piece, new ChessPosition(column, row).toPosition());
+		piecesOnTheBoard.add(piece);
 	}
 
 	private void initialSetup() {
