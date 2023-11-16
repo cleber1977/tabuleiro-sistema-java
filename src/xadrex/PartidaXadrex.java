@@ -80,7 +80,9 @@ public class PartidaXadrex {
 	}
 
 	private Pecas makeMove(Posicao source, Posicao target) {
-		Pecas p = board.removePiece(source);
+		PecasXadrex p = (PecasXadrex)board.removePiece(source);
+		p.increaseMoveCount();
+		
 		Pecas capturedPiece = board.removePiece(target);
 		board.PlacePecas(p, target);
 		
@@ -92,7 +94,8 @@ public class PartidaXadrex {
 	}
 	
 	private void undoMove(Posicao source, Posicao target, Pecas capturedPiece) {
-		Pecas p = board.removePiece(target);
+		PecasXadrex p = (PecasXadrex)board.removePiece(target);
+		p.decreaseMoveCount();
 		board.PlacePecas(p, source);
 		if(capturedPiece != null) {
 			board.PlacePecas(capturedPiece, target);
