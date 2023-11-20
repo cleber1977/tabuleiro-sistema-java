@@ -20,6 +20,7 @@ public class PartidaXadrex {
 	private Board board;
 	private boolean check;
 	private boolean checkMate;
+	private PecasXadrex enPassantVulnerable;
 
 	private List<Pecas> piecesOnTheBoard = new ArrayList<>();
 	private List<Pecas> capturedPieces = new ArrayList<>();
@@ -38,6 +39,10 @@ public class PartidaXadrex {
 
 	public boolean getCheckMate() {
 		return checkMate;
+	}
+	
+	public PecasXadrex getEnPassantVulnerable() {
+		return enPassantVulnerable;
 	}
 
 	public PartidaXadrex() {
@@ -74,12 +79,24 @@ public class PartidaXadrex {
 			undoMove(source, target, capturedPiece);
 			throw new ChessExcepetion("Vc nao pode se coloca em xeque");
 		}
+		
+		PecasXadrex movePiece = ((PecasXadrex)board.pecas(target));
+		
+		
 		check = (testCheck(oppnent(currentPlayer))) ? true : false;
 		if (testCheck(oppnent(currentPlayer))) {
 			checkMate = true;
 
 		} else {
 			nextTurn();
+		}
+		
+		//Movimento Especial enPassan
+		if(movePiece instanceof Peao && (target.getRow() == source.getRow() - 2 || target.getRow() == source.getRow() + 2)) {
+			enPassantVulnerable = movePiece;
+			
+		}else {
+			enPassantVulnerable =  null;
 		}
 
 		return (PecasXadrex) capturedPiece;
@@ -113,6 +130,22 @@ public class PartidaXadrex {
 			board.PlacePecas(rook, targetT);
 			rook.increaseMoveCount();
 		}
+		
+		// Movimento Especial enPassan
+		if(p instanceof Peao) {
+			if(source.getColumn() != target.getColumn() && capturedPiece == null) {
+				Posicao pawnPosition;
+				if(p.getColor() == Color.WHITE) {
+					pawnPosition = new Posicao(target.getRow() + 1, target.getColumn());
+				}else {
+					pawnPosition = new Posicao(target.getRow() - 1, target.getColumn());
+				}
+				capturedPiece = board.removePiece(pawnPosition);
+				capturedPieces.add(capturedPiece);
+				piecesOnTheBoard.remove(capturedPiece);
+				
+			}
+		}
 		return capturedPiece;
 	}
 
@@ -143,6 +176,20 @@ public class PartidaXadrex {
 			board.PlacePecas(rook, sourceT);
 			rook.decreaseMoveCount();
 		}
+		
+		// Desfazendo Movimento Especial enPassan
+				if(p instanceof Peao) {
+					if(source.getColumn() != target.getColumn() && capturedPiece == enPassantVulnerable) {
+						PecasXadrex pawn = (PecasXadrex)board.removePiece(target);
+						Posicao pawnPosition;
+						if(p.getColor() == Color.WHITE) {
+							pawnPosition = new Posicao(3, target.getColumn());
+						}else {
+							pawnPosition = new Posicao(4, target.getColumn());
+						}
+						board.PlacePecas(pawn, pawnPosition);
+					}
+				}
 
 	}
 
@@ -239,14 +286,14 @@ public class PartidaXadrex {
 		placeNewPiece('f', 1, new Bispo(board, Color.WHITE));
 		placeNewPiece('h', 1, new Rook(board, Color.WHITE));
 		placeNewPiece('g', 1, new Cavalo(board, Color.WHITE));
-		placeNewPiece('a', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('b', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('c', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('d', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('e', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('f', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('g', 2, new Peao(board, Color.WHITE));
-		placeNewPiece('h', 2, new Peao(board, Color.WHITE));
+		placeNewPiece('a', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('b', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('c', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('d', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('e', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('f', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('g', 2, new Peao(board, Color.WHITE, this));
+		placeNewPiece('h', 2, new Peao(board, Color.WHITE, this));
 
 		placeNewPiece('a', 8, new Rook(board, Color.BLACK));
 		placeNewPiece('c', 8, new Bispo(board, Color.BLACK));
@@ -256,14 +303,14 @@ public class PartidaXadrex {
 		placeNewPiece('f', 8, new Bispo(board, Color.BLACK));
 		placeNewPiece('g', 8, new Cavalo(board, Color.BLACK));
 		placeNewPiece('h', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('a', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('b', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('c', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('d', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('e', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('f', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('g', 7, new Peao(board, Color.BLACK));
-		placeNewPiece('h', 7, new Peao(board, Color.BLACK));
+		placeNewPiece('a', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('b', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('c', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('d', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('e', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('f', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('g', 7, new Peao(board, Color.BLACK, this));
+		placeNewPiece('h', 7, new Peao(board, Color.BLACK, this));
 
 	}
 }
