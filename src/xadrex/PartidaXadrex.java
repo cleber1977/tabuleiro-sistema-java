@@ -11,6 +11,7 @@ import xadrex.pecas.Bispo;
 import xadrex.pecas.Cavalo;
 import xadrex.pecas.King;
 import xadrex.pecas.Peao;
+import xadrex.pecas.Queen;
 import xadrex.pecas.Rook;
 
 public class PartidaXadrex {
@@ -193,6 +194,7 @@ public class PartidaXadrex {
 		placeNewPiece('a', 1, new Rook(board, Color.WHITE));
 		placeNewPiece('b', 1, new Cavalo(board, Color.WHITE));
 		placeNewPiece('c', 1, new Bispo(board, Color.WHITE));
+		placeNewPiece('d', 1, new Queen(board, Color.WHITE));
 		placeNewPiece('e', 1, new King(board, Color.WHITE));
 		placeNewPiece('f', 1, new Bispo(board, Color.WHITE));
 		placeNewPiece('h', 1, new Rook(board, Color.WHITE));
@@ -208,6 +210,7 @@ public class PartidaXadrex {
 		
 	    placeNewPiece('a', 8, new Rook(board, Color.BLACK));
 	    placeNewPiece('c', 8, new Bispo(board, Color.BLACK));
+	    placeNewPiece('d', 8, new Queen(board, Color.BLACK));
 	    placeNewPiece('b', 8, new Cavalo(board, Color.BLACK));
 		placeNewPiece('e', 8, new King(board, Color.BLACK));
 		placeNewPiece('f', 8, new Bispo(board, Color.BLACK));

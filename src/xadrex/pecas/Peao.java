@@ -22,7 +22,7 @@ public class Peao extends PecasXadrex {
 				mat[p.getRow()][p.getColumn()] = true;
 			}
 			p.setValues(position.getRow() - 2 , position.getColumn());
-			Posicao p2 = new Posicao(position.getRow() -1, position.getColumn());
+			Posicao p2 = new Posicao(position.getRow() -1 , position.getColumn());
 			if(getBoard().positionExists(p) && !getBoard().therIsaPiece(p) && getBoard().positionExists(p2) && !getBoard().therIsaPiece(p2) && getMoveCount()==0) {
 				mat[p.getRow()][p.getColumn()] = true;
 			}
