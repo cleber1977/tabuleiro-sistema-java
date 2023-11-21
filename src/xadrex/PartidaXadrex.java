@@ -21,7 +21,7 @@ public class PartidaXadrex {
 	private boolean check;
 	private boolean checkMate;
 	private PecasXadrex enPassantVulnerable;
-
+	private PecasXadrex promoted;
 	private List<Pecas> piecesOnTheBoard = new ArrayList<>();
 	private List<Pecas> capturedPieces = new ArrayList<>();
 
@@ -44,7 +44,11 @@ public class PartidaXadrex {
 	public PecasXadrex getEnPassantVulnerable() {
 		return enPassantVulnerable;
 	}
-
+	
+	public PecasXadrex getPromoted() {
+		return promoted;
+	}
+	
 	public PartidaXadrex() {
 		turn = 1;
 		currentPlayer = Color.WHITE;
@@ -75,12 +79,24 @@ public class PartidaXadrex {
 		validateSourcePosition(source);
 		validadeTargetPosition(source, target);
 		Pecas capturedPiece = makeMove(source, target);
+		
 		if (testCheck(currentPlayer)) {
 			undoMove(source, target, capturedPiece);
 			throw new ChessExcepetion("Vc nao pode se coloca em xeque");
 		}
 		
 		PecasXadrex movePiece = ((PecasXadrex)board.pecas(target));
+		
+		// Movimento Especial promoted
+		
+		promoted = null;
+		if(movePiece instanceof Peao) {
+			if(movePiece.getColor() == Color.WHITE && target.getRow() == 0 || movePiece.getColor() == Color.BLACK && target.getRow() == 7 ) {
+				promoted = (PecasXadrex)board.pecas(target);
+				promoted = replacePromotedPiece("Q");
+			}
+			
+		}
 		
 		
 		check = (testCheck(oppnent(currentPlayer))) ? true : false;
@@ -100,6 +116,32 @@ public class PartidaXadrex {
 		}
 
 		return (PecasXadrex) capturedPiece;
+	}
+	
+	public PecasXadrex replacePromotedPiece(String type) {
+		if(promoted == null) {
+			throw new IllegalStateException("There is no peca to be promoted");
+		}
+		if(!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")) {
+			return promoted;	
+		}
+		
+		Posicao pos = promoted.getChessPosition().toPosition();
+		Pecas p = board.removePiece(pos);
+		piecesOnTheBoard.remove(p);
+		
+		PecasXadrex newPiece = newPiece(type, promoted.getColor());
+		board.PlacePecas(newPiece, pos);
+		piecesOnTheBoard.add(newPiece);
+		return newPiece;
+		
+	}
+	
+	private PecasXadrex newPiece(String type, Color color) {
+		if(type.equals("B")) return new Bispo(board, color);
+		if(type.equals("B")) return new Cavalo(board, color);
+		if(type.equals("B")) return new Queen(board, color);
+		return new Rook(board, color);
 	}
 
 	private Pecas makeMove(Posicao source, Posicao target) {

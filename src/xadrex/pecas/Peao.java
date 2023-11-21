@@ -8,6 +8,7 @@ import xadrex.PecasXadrex;
 
 public class Peao extends PecasXadrex {
 	private PartidaXadrex partidaXadrex;
+	
 
 	public Peao(Board board, Color color, PartidaXadrex partidaXadrex) {
 		super(board, color);
